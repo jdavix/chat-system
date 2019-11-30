@@ -1,0 +1,24 @@
+* {box-sizing: border-box;}
+
+.conver {
+  display: flex;
+  flex-direction: column;
+}
+
+.messages-container {
+  height: 60vh;
+}
+
+.message-input {
+  flex: 0.2;
+}
+
+.top-menu {
+  padding: 10px 5px;
+  background-color: #ccc;
+}
+
+.top-menu h1 {
+  font-size: 18px;
+  text-align: center;
+}

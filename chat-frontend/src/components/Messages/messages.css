@@ -1,0 +1,18 @@
+.messages-container {
+  border: 1px #ccc solid;
+  width: 100%;
+  height: 100%;
+  font-size: 12px;
+  padding: 15px;
+}
+
+.message-item .user {
+  font-weight: 500;
+  font-family: 'Roboto';
+  padding: 0;
+  margin: 0;
+}
+
+.message-item .date {
+  font-weight: 300;
+}
