@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import configureMongoose from '../config/mongodb';
+import configureConnection from '../config/mongodb';
 
 const MessageSchema = new mongoose.Schema({
   text: String,
@@ -13,6 +13,6 @@ const MessageSchema = new mongoose.Schema({
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
 });
 
-const connection = configureMongoose();
+const connection = configureConnection();
 
 export default connection.model('Message', MessageSchema);

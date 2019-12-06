@@ -1,20 +1,11 @@
-export const index = (req, res) => {
+export const show = async (req, res) => {
   res.json({ message: 'hooray! welcome to our api!' });
 };
 
-export const show = (req, res) => {
+export const create = async (req, res) => {
   res.json({ message: 'hooray! welcome to our api!' });
 };
 
-export const create = (req, res) => {
-  res.json({ message: 'hooray! welcome to our api!' });
-};
-
-
-export const update = (req, res) => {
-  res.json({ message: 'hooray! welcome to our api!' });
-};
-
-export const hide = (req, res) => {
+export const update = async (req, res) => {
   res.json({ message: 'hooray! welcome to our api!' });
 };

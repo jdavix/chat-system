@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import configureMongoose from '../config/mongodb';
+import configureConnection from '../config/mongodb';
 
 const UserSchema = new mongoose.Schema({
   username: String,
@@ -9,6 +9,6 @@ const UserSchema = new mongoose.Schema({
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
 });
 
-const connection = configureMongoose();
+const connection = configureConnection();
 
 export default connection.model('User', UserSchema);
