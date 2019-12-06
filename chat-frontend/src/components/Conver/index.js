@@ -1,7 +1,8 @@
 import React, {useContext} from 'react';
 import Messages from '../Messages';
 import MessageInput from '../MessageInput';
-import AppContext from '../../lib/appContext'
+import AppContext from '../../lib/appContext';
+
 import './conver.css';
 
 

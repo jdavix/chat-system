@@ -34,3 +34,9 @@
 .people-container {
   margin-top: 15px;
 }
+
+.sidebar-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
