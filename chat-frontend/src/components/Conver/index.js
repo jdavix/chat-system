@@ -8,7 +8,7 @@ import './conver.css';
 
 export default function Conver(props) {
   const {socket} = useContext(AppContext);
-
+  console.log("Conver render: ", socket);
   return (
     <div className="conver">
       <div className="top-menu">

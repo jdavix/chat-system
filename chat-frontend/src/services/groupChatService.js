@@ -18,7 +18,19 @@ export function fetchChat(id) {
     method: 'get',
     url: API_URL + `/api/v1/group_chats/${id}`,
     headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-    data: {
+    params: {
+      ...DEFAULT_PARAMS,
+    },
+  });
+}
+
+export function fetchChats(params) {
+  return axios({
+    method: 'get',
+    url: API_URL + '/api/v1/group_chats',
+    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+    params: {
+      ...params,
       ...DEFAULT_PARAMS,
     },
   });

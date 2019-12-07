@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { Container, Row, Col } from 'reactstrap';
 import Sidebar from './components/shared/sidebar';
@@ -10,11 +11,12 @@ import io from 'socket.io-client';
 import {saveGroupChat} from './services/groupChatService';
 import ChatStore from './stores/chatStore';
 
-const socket = io('localhost:3001');
+let initialSocket = io('localhost:3001');
 
 const App = observer((props)=> {
 
   const [modal, setModal] = useState(false);
+  const [socket, setSocket] = useState(initialSocket);
 
   const toggle = () => setModal(!modal);
 
@@ -22,11 +24,19 @@ const App = observer((props)=> {
   let { currentChat, setChat } = chatStore;
 
   useEffect(()=>{
-    console.log("SOCKET EFFECT");
     chatStore.rehydrateChat().then((chat)=>{
-      socket.emit('JOIN', {chat, user_id: '5de8160ebf75f3a5fe2e2044'});
     })
   }, [])
+
+  useEffect(()=>{
+    if (currentChat._id) {
+      let skt = io('localhost:3001');
+      let chat = toJS(currentChat);
+      skt.emit('JOIN', {chat, user_id: '5de8160ebf75f3a5fe2e2044'});
+      setSocket(skt);
+      console.log("Joining...: ", chat._id);
+    }
+  }, [currentChat]);
 
   const handleSubmit = async (fields) => {
     let emailList = fields.emailList;
@@ -37,10 +47,8 @@ const App = observer((props)=> {
     let resp;
     try {
       resp = await saveGroupChat({title: title, invited_emails: emailList});
-      console.log("S resp: ", resp);
       setChat(resp.data);
     } catch(e) {
-      console.log("E resp: ", e);
       resp = e.response;
     }
     

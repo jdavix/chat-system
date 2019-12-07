@@ -19,7 +19,6 @@ export default function Messages(props) {
   }
 
   useEffect(()=>{
-    console.log("Went 1")
     loadMessages()
     props.socket.on('RECEIVE_MESSAGE', function(data) {
       console.log("Received once?")
@@ -28,7 +27,7 @@ export default function Messages(props) {
       container.current.scrollTop = container.current.scrollHeight;
     });
 
-  }, [props.chat_id])
+  }, [props.socket])
 
   useEffect(()=>{
     container.current.scrollTop = container.current.scrollHeight;
