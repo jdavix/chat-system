@@ -30,6 +30,7 @@ const App = observer((props)=> {
 
   useEffect(()=>{
     if (currentChat._id) {
+      socket.disconnect();
       let skt = io('localhost:3001');
       let chat = toJS(currentChat);
       skt.emit('JOIN', {chat, user_id: '5de8160ebf75f3a5fe2e2044'});
@@ -65,7 +66,7 @@ const App = observer((props)=> {
       <Container>
         <Row>
           <Col md="4" style={{padding: 0}}>
-            <Sidebar newConver={toggle} chat={currentChat}/>
+            <Sidebar newConver={toggle} chat={currentChat} setChat={setChat}/>
           </Col>
           <Col md="8" style={{padding: 0}}>
             <Conver chat={currentChat}/>
