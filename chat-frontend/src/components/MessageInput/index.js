@@ -18,6 +18,7 @@ export default function MessageInput(props) {
       sent_at: new Date(),
       group_chat: props.chat_id,
     });
+    setText('');
   }
   return (
     <div className="message-input">
