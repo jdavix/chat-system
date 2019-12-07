@@ -8,7 +8,10 @@ export default function Messages(props) {
 
   async function loadMessages() {
     try {
-      let data = await fetchMessages();
+      if (!props.chat_id) return null ;
+
+      console.log("CHAT ID: ", props.chat_id);
+      let data = await fetchMessages({chat_id: props.chat_id});
       setMessages(data.data);
     } catch(e) {
       console.log(e);
@@ -16,6 +19,7 @@ export default function Messages(props) {
   }
 
   useEffect(()=>{
+    console.log("Went 1")
     loadMessages()
     props.socket.on('RECEIVE_MESSAGE', function(data) {
       console.log("Received once?")
@@ -24,7 +28,7 @@ export default function Messages(props) {
       container.current.scrollTop = container.current.scrollHeight;
     });
 
-  }, [])
+  }, [props.chat_id])
 
   useEffect(()=>{
     container.current.scrollTop = container.current.scrollHeight;
