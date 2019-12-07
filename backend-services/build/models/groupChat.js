@@ -19,7 +19,9 @@ var GroupChatSchema = new _mongoose["default"].Schema({
   participants: [{
     type: _mongoose["default"].Schema.Types.ObjectId,
     ref: 'User'
-  }]
+  }],
+  // TODO: invitations objects.
+  invitations: [String]
 }, {
   timestamps: {
     createdAt: 'created_at',

@@ -9,6 +9,10 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
@@ -27,29 +31,63 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-var BasicError =
+var ApiError =
 /*#__PURE__*/
 function (_Error) {
-  _inherits(BasicError, _Error);
+  _inherits(ApiError, _Error);
 
-  function BasicError(statusCode, message) {
+  function ApiError(statusCode, message) {
     var _this;
 
     var meta = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
+      validationError: true
+    };
 
-    _classCallCheck(this, BasicError);
+    _classCallCheck(this, ApiError);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(BasicError).call(this));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ApiError).call(this));
     _this.statusCode = statusCode;
     _this.message = message;
-    _this.meta = meta;
+    _this.meta = _this.metaFactory(meta, options);
     return _this;
   }
 
-  return BasicError;
+  _createClass(ApiError, [{
+    key: "metaFactory",
+    value: function metaFactory(meta, options) {
+      if (options.validationError === true) {
+        var format = {};
+        Object.keys(meta).forEach(function (field) {
+          format[field] = meta[field].message;
+        });
+        return format;
+      }
+
+      return meta;
+    }
+  }, {
+    key: "meta",
+    get: function get() {
+      return this._meta;
+    },
+    set: function set(meta) {
+      this._meta = meta;
+    }
+  }, {
+    key: "message",
+    get: function get() {
+      return this._message;
+    },
+    set: function set(message) {
+      this._message = message;
+    }
+  }]);
+
+  return ApiError;
 }(_wrapNativeSuper(Error));
 
-exports["default"] = BasicError;
+exports["default"] = ApiError;
 
 var handleError = function handleError(err, res) {
   var statusCode = err.statusCode,
@@ -69,8 +107,8 @@ var rescueController = function rescueController(fn) {
       console.log(e);
       var error = e;
 
-      if (e.constructor.name !== 'BasicError') {
-        error = new BasicError(500, 'We are sorry something went wrong');
+      if (e.constructor.name !== 'ApiError') {
+        error = new ApiError(500, 'We are sorry something went wrong');
       }
 
       next(error);

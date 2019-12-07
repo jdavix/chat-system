@@ -9,7 +9,7 @@ var _mongoose = _interopRequireDefault(require("mongoose"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var configureMongoose = function configureMongoose() {
+var configureConnection = function configureConnection() {
   _mongoose["default"].connect('mongodb://localhost:27017', {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -23,5 +23,5 @@ var configureMongoose = function configureMongoose() {
   return db;
 };
 
-var _default = configureMongoose;
+var _default = configureConnection;
 exports["default"] = _default;

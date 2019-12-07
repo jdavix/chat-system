@@ -9,11 +9,14 @@ var _messagesRoutes = _interopRequireDefault(require("./messagesRoutes"));
 
 var _usersRoutes = _interopRequireDefault(require("./usersRoutes"));
 
+var _groupChatsRoutes = _interopRequireDefault(require("./groupChatsRoutes"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var applyRoutes = function applyRoutes(router) {
   (0, _messagesRoutes["default"])(router);
   (0, _usersRoutes["default"])(router);
+  (0, _groupChatsRoutes["default"])(router);
 };
 
 var _default = applyRoutes;

@@ -11,7 +11,7 @@ const GroupChatSchema = new mongoose.Schema({
     ref: 'User',
   }],
   // TODO: invitations objects.
-  invitations: [Map],
+  invitations: [String],
 },
 {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },

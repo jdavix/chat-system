@@ -16,7 +16,7 @@ export const show = async (req, res, next) => {
 
 export const create = async (req, res) => {
   let participants = await User.find({email: { $in: req.body.invited_emails }})
-  participants = participants.map((p)=>{ return p._id })
+  participants = participants.map((p)=>{ return p._id.toHexString() })
   const params = {
     title: req.body.title,
     participants: participants,
@@ -26,7 +26,9 @@ export const create = async (req, res) => {
   let groupChat = new GroupChat(params);
   let error = groupChat.validateSync();
   if (!error) {
-    res.json(groupChat);
+    groupChat.save((err, chat)=>{
+      res.json(groupChat);
+    })
   } else {
     throw new ApiError(422, 'Group Chat could not be created', error.errors)
   }

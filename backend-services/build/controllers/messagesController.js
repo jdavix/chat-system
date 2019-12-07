@@ -45,9 +45,18 @@ var show = function show(req, res, next) {
 
         case 2:
           message = _context2.sent;
+
+          if (message) {
+            _context2.next = 5;
+            break;
+          }
+
+          throw new ApiError(404, 'Message not found');
+
+        case 5:
           res.json(message);
 
-        case 4:
+        case 6:
         case "end":
           return _context2.stop();
       }
@@ -58,15 +67,32 @@ var show = function show(req, res, next) {
 exports.show = show;
 
 var create = function create(req, res) {
-  var message;
+  var params, message, error;
   return regeneratorRuntime.async(function create$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
-          message = _message["default"].create(req.params);
-          res.json(message);
+          params = {
+            text: req.params.text,
+            sent_at: req.params.sent_at,
+            group_chat: req.params.group_chat_id
+          };
+          message = new _message["default"](params);
+          error = message.validateSync();
 
-        case 2:
+          if (error) {
+            _context3.next = 7;
+            break;
+          }
+
+          res.json(message);
+          _context3.next = 8;
+          break;
+
+        case 7:
+          throw new ApiError(422, 'Message could not be created', error.errors);
+
+        case 8:
         case "end":
           return _context3.stop();
       }
@@ -77,17 +103,57 @@ var create = function create(req, res) {
 exports.create = create;
 
 var update = function update(req, res) {
-  res.json({
-    message: 'hooray! welcome to our api!'
-  });
+  var params, message, result;
+  return regeneratorRuntime.async(function update$(_context4) {
+    while (1) {
+      switch (_context4.prev = _context4.next) {
+        case 0:
+          params = {
+            text: req.params.text,
+            sent_at: req.params.sent_at,
+            group_chat: req.params.group_chat_id
+          };
+          _context4.next = 3;
+          return regeneratorRuntime.awrap(_message["default"].findById(req.params.id));
+
+        case 3:
+          message = _context4.sent;
+
+          if (message) {
+            _context4.next = 6;
+            break;
+          }
+
+          throw new ApiError(404, 'Message not found');
+
+        case 6:
+          message.set(params);
+          _context4.prev = 7;
+          _context4.next = 10;
+          return regeneratorRuntime.awrap(message.save());
+
+        case 10:
+          result = _context4.sent;
+          res.json(message);
+          _context4.next = 17;
+          break;
+
+        case 14:
+          _context4.prev = 14;
+          _context4.t0 = _context4["catch"](7);
+          throw new ApiError(422, 'Group Chat could not be updated', _context4.t0.errors);
+
+        case 17:
+        case "end":
+          return _context4.stop();
+      }
+    }
+  }, null, null, [[7, 14]]);
 };
 
 exports.update = update;
 
-var hide = function hide(req, res) {
-  res.json({
-    message: 'hooray! welcome to our api!'
-  });
+var hide = function hide(req, res) {// pending
 };
 
 exports.hide = hide;
