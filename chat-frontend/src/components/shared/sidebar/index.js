@@ -23,6 +23,10 @@ export default function Sidebar(props) {
     loadDirects();
   }, [])
 
+  function personClassName(item) {
+    return `person ${item.title === props.chat.title ? 'active' : null}`
+  }
+
   return (
       <div className="sidebar">
         <div className="sidebar-header">
@@ -31,13 +35,13 @@ export default function Sidebar(props) {
         <div className="groups-container">
           <div className="group-title"><h2>Groups</h2></div>
           {groups.map((group)=> {
-            return <div className="person">{group.title}</div>
+            return <div className={personClassName(group)}>{group.title}</div>
           })}
         </div>
         <div className="people-container">
           <div className="group-title"><h2>Direct Messages</h2></div>
           {directs.map((direct)=> {
-            return <div className="person">{direct.title}</div>
+            return <div className={personClassName(direct)}>{direct.title}</div>
           })}
         </div>
       </div>

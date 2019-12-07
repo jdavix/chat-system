@@ -65,7 +65,7 @@ const App = observer((props)=> {
       <Container>
         <Row>
           <Col md="4" style={{padding: 0}}>
-            <Sidebar newConver={toggle}/>
+            <Sidebar newConver={toggle} chat={currentChat}/>
           </Col>
           <Col md="8" style={{padding: 0}}>
             <Conver chat={currentChat}/>
