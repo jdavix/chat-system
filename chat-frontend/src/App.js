@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Container, Row, Col } from 'reactstrap';
 import Sidebar from './components/shared/sidebar';
 import Conver from './components/Conver';
@@ -7,14 +8,26 @@ import {Form, Input} from '@rocketseat/unform';
 import {Provider} from './lib/appContext';
 import io from 'socket.io-client';
 import {saveGroupChat} from './services/groupChatService';
+import ChatStore from './stores/chatStore';
 
-function App() {
+const socket = io('localhost:3001');
 
-  const socket = io('localhost:3001');
+const App = observer((props)=> {
 
- const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
+
+  const chatStore = useContext(ChatStore);
+  let { currentChat, setChat } = chatStore;
+
+  useEffect(()=>{
+    console.log("SOCKET EFFECT");
+    chatStore.rehydrateChat().then((chat)=>{
+      socket.emit('JOIN', {chat, user_id: '5de8160ebf75f3a5fe2e2044'});
+    })
+  }, [])
+
   const handleSubmit = async (fields) => {
     let emailList = fields.emailList;
     let title = fields.title;
@@ -24,8 +37,10 @@ function App() {
     let resp;
     try {
       resp = await saveGroupChat({title: title, invited_emails: emailList});
-      console.log("11")
+      console.log("S resp: ", resp);
+      setChat(resp.data);
     } catch(e) {
+      console.log("E resp: ", e);
       resp = e.response;
     }
     
@@ -45,7 +60,7 @@ function App() {
             <Sidebar newConver={toggle}/>
           </Col>
           <Col md="8" style={{padding: 0}}>
-            <Conver />
+            <Conver chat={currentChat}/>
           </Col>
         </Row>
         <Modal isOpen={modal} toggle={toggle}>
@@ -76,6 +91,6 @@ function App() {
       </Container>
     </Provider>
   );
-}
+})
 
 export default App;

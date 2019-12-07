@@ -12,3 +12,14 @@ export function saveGroupChat(params) {
     },
   });
 }
+
+export function fetchChat(id) {
+  return axios({
+    method: 'get',
+    url: API_URL + `/api/v1/group_chats/${id}`,
+    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+    data: {
+      ...DEFAULT_PARAMS,
+    },
+  });
+}

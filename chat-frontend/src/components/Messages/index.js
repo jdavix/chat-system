@@ -1,20 +1,37 @@
 import './messages.css';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {fetchMessages} from '../../services/messagesService';
 
 export default function Messages(props) {
-  let [messages, addMessage] = useState([]);
+  let [messages, setMessages] = useState([]);
 
-  props.socket.on('RECEIVE_MESSAGE', function(data){
-    addMessage([...messages, data]);
-  });
+  async function loadMessages() {
+    console.log("CALLED")
+    try {
+      let data = await fetchMessages();
+      setMessages(data.data);
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  useEffect(()=>{
+    loadMessages()
+
+    props.socket.on('RECEIVE_MESSAGE', function(data) {
+      console.log("Received once?")
+      setMessages((messages) => [...messages, data]);
+    });
+
+  }, [])
 
   return (
     <div className="messages-container">
       {
-        messages.map((message)=> {
+        messages.map((message, index)=> {
           return (
-            <div className="message-item" key={message.id}>
-              <p className="user">{message.author} <span className="date">{message.sent_at}</span></p>
+            <div className="message-item" key={index}>
+              <p className="user">{message.creator_username} <span className="date">{message.sent_at}</span></p>
               <p className="text">{message.text}</p>
             </div>
           )

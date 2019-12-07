@@ -12,10 +12,10 @@ export default function Conver(props) {
   return (
     <div className="conver">
       <div className="top-menu">
-        <h1>Conversation with Cesar</h1>
+        <h1>{props.chat.title}</h1>
       </div>
       <Messages socket={socket}/>
-      <MessageInput socket={socket}/>
+      <MessageInput socket={socket} chat_id={props.chat._id}/>
     </div>
   )
 }

@@ -7,13 +7,16 @@ export default function MessageInput(props) {
   function onChange(e) {
     setText(e.target.value);
   }
-  function sendMessage(e){
+  function sendMessage(e) {
+    console.log("sending")
+    console.log(props.chat_id);
     e.preventDefault();
     props.socket.emit('SEND_MESSAGE', {
-      id: Math.random(),
-      author: "Josh",
+      creator_username: "Josh",
+      creator: '5de8160ebf75f3a5fe2e2044',
       text: text,
-      sent_at: '3:00 PM'
+      sent_at: new Date(),
+      group_chat: props.chat_id,
     });
   }
   return (
