@@ -3,7 +3,10 @@ import User from '../models/User';
 import ApiError from '../lib/error';
 
 export const index = async (req, res, next) => {
-  let result = await GroupChat.find({});
+  let user_id = req.query.user_id;
+  let chat_type = req.query.chat_type;
+  console.log("Chat Type: ", chat_type);
+  let result = await GroupChat.find({participants: {$in: [user_id]}, chat_type: chat_type});
   res.json(result);
 };
 
@@ -17,7 +20,10 @@ export const show = async (req, res, next) => {
 export const create = async (req, res) => {
   let participants = await User.find({email: { $in: req.body.invited_emails }})
   participants = participants.map((p)=>{ return p._id.toHexString() })
+  let chat_type = 'direct';
+  if (req.body.invited_emails.length > 2) chat_type = 'group';
   const params = {
+    chat_type: chat_type,
     title: req.body.title,
     participants: participants,
     invitations: req.body.invited_emails,

@@ -1,9 +1,7 @@
 import Message from '../models/message';
-import BasicError from '../lib/error';
+import ApiError from '../lib/error';
 
 export const index = async (req, res, next) => {
-  console.log("PMS: ", req.query);
-  console.log("ChatID: ", req.query.chat_id);
   let result = await Message.find({group_chat: req.query.chat_id});
   res.json(result);
 };

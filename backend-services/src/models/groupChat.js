@@ -2,6 +2,10 @@ import mongoose from 'mongoose';
 import configureConnection from '../config/mongodb';
 
 const GroupChatSchema = new mongoose.Schema({
+  chat_type: {
+    type: String,
+    enum: ['group', 'direct'],
+  },
   title: {
     type: String,
     required: [true, "Title can't be blank"],
