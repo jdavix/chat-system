@@ -18,7 +18,9 @@ var index = function index(req, res, next) {
       switch (_context.prev = _context.next) {
         case 0:
           _context.next = 2;
-          return regeneratorRuntime.awrap(_message["default"].find({}));
+          return regeneratorRuntime.awrap(_message["default"].find({
+            group_chat: req.params.chat_id
+          }));
 
         case 2:
           result = _context.sent;

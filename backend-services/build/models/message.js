@@ -13,10 +13,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 var MessageSchema = new _mongoose["default"].Schema({
   text: String,
+  creator_username: String,
   sent_at: Date,
   group_chat: {
     type: _mongoose["default"].Schema.Types.ObjectId,
     ref: 'GroupChat'
+  },
+  creator: {
+    type: _mongoose["default"].Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   timestamps: {

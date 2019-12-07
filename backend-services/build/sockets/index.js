@@ -14,8 +14,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 var configureSockets = function configureSockets(server) {
   var io = (0, _socket["default"])(server);
   io.on('connection', function (skt) {
-    skt.on('JOIN', function (chat) {
-      skt.join(chat._id);
+    skt.on('JOIN', function (data) {
+      console.log("JOINED: ", data.chat._id);
+      skt.join(data.chat._id);
     });
     skt.on('SEND_MESSAGE', function (message) {
       // Note: currently it is not blocking the event emission by storing into the database first
@@ -27,6 +28,7 @@ var configureSockets = function configureSockets(server) {
         console.log(e);
       }
 
+      console.log("Emitting: ", message.text);
       io["in"](message.group_chat).emit('RECEIVE_MESSAGE', message);
     });
     skt.on('TYPING', function (data) {
