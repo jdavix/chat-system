@@ -21,7 +21,7 @@ export default function Sidebar(props) {
   useEffect(()=>{
     loadGroups();
     loadDirects();
-  }, [])
+  }, [props.chat])
 
   function personClassName(item) {
     return `person ${item.title === props.chat.title ? 'active' : null}`
