@@ -1,5 +1,5 @@
 import GroupChat from '../models/groupChat';
-import User from '../models/User';
+import User from '../models/user';
 import ApiError from '../lib/error';
 
 export const index = async (req, res, next) => {

@@ -1,14 +1,37 @@
 import mongoose from 'mongoose';
-import configureConnection from '../config/mongodb';
+import bcrypt from 'bcrypt';
+
+const SALT_ROUNDS = 10;
 
 const UserSchema = new mongoose.Schema({
-  username: String,
-  email: String,
+  username: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    trim: true,
+    uniq: true,
+  },
+  password: {
+    type: String,
+    trim: true,
+    required: true,
+  },
 },
 {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
 });
 
-const connection = configureConnection();
+const { connection } = mongoose;
+
+UserSchema.pre('save', function (next) {
+  if (!this.isModified('password')) return next();
+
+  this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);
+  next();
+});
 
 export default connection.model('User', UserSchema);

@@ -1,11 +1,11 @@
 import * as _ from '../controllers/groupChatController';
 import { rescueController } from '../lib/error';
 
-const groupChatsRoutes = (router) => {
-  router.get('/group_chats', rescueController(_.index));
-  router.get('/group_chats/:id', rescueController(_.show));
-  router.post('/group_chats', rescueController(_.create));
-  router.put('/group_chats/:id', rescueController(_.update));
+const groupChatsRoutes = (router, authenticate) => {
+  router.get('/group_chats', authenticate, rescueController(_.index));
+  router.get('/group_chats/:id', authenticate, rescueController(_.show));
+  router.post('/group_chats', authenticate, rescueController(_.create));
+  router.put('/group_chats/:id', authenticate, rescueController(_.update));
 };
 
 

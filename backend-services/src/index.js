@@ -1,10 +1,25 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
+import jwt from 'jsonwebtoken';
 import applyRoutes from './routes';
 import { handleError } from './lib/error';
 import configureSockets from './sockets';
+import configureConnection from './config/mongodb';
+import env from './config/env';
+
+function authenticate(req, res, next) {
+  jwt.verify(req.headers['x-access-token'], env.secret, (err, decoded) => {
+    if (err) {
+      handleError({ statusCode: 401, message: 'Unauthorized' }, res);
+    } else {
+      req.body.currentUserId = decoded.id;
+      next();
+    }
+  });
+}
+
+configureConnection();
 
 const app = express();
 
@@ -22,7 +37,7 @@ const port = process.env.PORT || 3001;
 
 const router = express.Router();
 
-applyRoutes(router);
+applyRoutes(router, authenticate);
 
 app.use('/api/v1', router);
 

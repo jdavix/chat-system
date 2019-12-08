@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import configureConnection from '../config/mongodb';
 
 const GroupChatSchema = new mongoose.Schema({
   chat_type: {
@@ -21,6 +20,6 @@ const GroupChatSchema = new mongoose.Schema({
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
 });
 
-const connection = configureConnection();
+const { connection } = mongoose;
 
 export default connection.model('GroupChat', GroupChatSchema);
