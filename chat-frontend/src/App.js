@@ -11,11 +11,17 @@ import {
 import Chat from './pages/chat';
 import Landing from './pages/landing';
 
-export function App(props) {
-  const [loading, setLoading] = useState(true);
+const App = observer((props) => {
 
   const authStore = useContext(AuthStore);
-  let { token, currentUser, setToken, signout, rehydrateCurrentUser } = authStore;
+  let { token,
+        currentUser,
+        setToken,
+        signout,
+        rehydrateCurrentUser,
+        setCurrentUser } = authStore;
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(()=>{
     rehydrateCurrentUser().then((resp)=>{
@@ -31,7 +37,6 @@ export function App(props) {
           path="/chat"
           index exact
           token={token}
-          loading={loading}
         >
           <Chat
             currentUser={currentUser}
@@ -46,18 +51,23 @@ export function App(props) {
               state: {from: props.location}
             }} />
           }
-          return <Landing {...props} setToken={setToken}/>
+          return <Landing
+                   {...props}
+                   setToken={setToken}
+                   loading={loading}
+                   setLoading={setLoading}
+                   setCurrentUser={setCurrentUser}
+                 />
         }}/>
       </Switch>
     </Router>
   );
-}
+})
 
-export default observer(App);
+export default App;
 
 function PrivateRoute({ children, ...props }) {
-  const {loading, token} = props;
-  console.log("TOKEN?: ", token)
+  const { token } = props;
   return (
     <Route
       {...props}

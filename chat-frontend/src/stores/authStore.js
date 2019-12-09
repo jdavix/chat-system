@@ -10,6 +10,7 @@ class AuthStore {
     this.rehydrateCurrentUser = this.rehydrateCurrentUser.bind(this);
     this.setToken = this.setToken.bind(this);
     this.signout = this.signout.bind(this);
+    this.setCurrentUser = this.setCurrentUser.bind(this);
   }
 
   setToken(token) {
@@ -19,10 +20,15 @@ class AuthStore {
     }
   }
 
+  setCurrentUser(user) {
+    console.log("setCurrentUser: ", user);
+    this.currentUser = user;
+  }
+
   signout(token) {
     this.token = null;
     this.currentUser = {};
-    localStorage.setItem('token', null)
+    localStorage.removeItem('token')
   }
 
   async rehydrateCurrentUser() {
@@ -43,6 +49,7 @@ decorate(AuthStore, {
   token: observable,
   setToken: action,
   rehydrateCurrentUser: action,
+  setCurrentUser: action,
   signout: action,
 })
 

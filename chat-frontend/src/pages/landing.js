@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Col, Row } from 'reactstrap';
 import {Form, Input} from '@rocketseat/unform';
 import {signin, signup} from '../services/usersService';
@@ -7,9 +7,16 @@ import './landing.css';
 
 function Landing(props) {
   const [signupErrors, setErrors] = useState({})
-  const {setToken} = props;
+  const {setToken, setCurrentUser, setLoading} = props;
 
   const token = localStorage.getItem('token')
+
+  useEffect(()=>{
+    if (!token) {
+      setLoading(false) ;
+    }
+  }, [])
+
 
   async function register(fields, {resetForm}) {
     try {
@@ -28,6 +35,7 @@ function Landing(props) {
   async function login(fields, {resetForm}) {
     try {
       let data = await signin(fields);
+      setCurrentUser(data.data);
       setToken(data.data.token);
     } catch(err) {
       if (err.response) {
@@ -39,10 +47,8 @@ function Landing(props) {
     resetForm();
   }
 
-  console.log("Token???", token)
-
   return (
-    !token ? (<h3 style={{width: '100%', textAlign: 'center', marginTop: '20%'}}>Loading...</h3>) :
+    props.loading ? (<h3 style={{width: '100%', textAlign: 'center', marginTop: '20%'}}>Loading...</h3>) :
     <Row>
       <Col md="4" className="left-side-banner">
         <div className="inner-side-container">
