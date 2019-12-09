@@ -4,11 +4,12 @@ import jwt from 'jsonwebtoken';
 import env from '../config/env';
 import ApiError from '../lib/error';
 
-export const show = async (req, res) => {
-  let user = await User.findById(req.params.id);
-  if (!user) throw new ApiError(404, 'Message not found') ;
+export const me = async (req, res) => {
+  let user = await User.findById(req.body.currentUserId);
 
-  res.json(user);
+  if (!user) throw new ApiError(404, 'Message not found') ;
+    console.log("ME: ", user.serialize())
+  res.json(user.serialize());
 };
 
 export const create = async (req, res) => {
