@@ -1,0 +1,34 @@
+.left-side-banner {
+  background-color: #1e88e5;
+  height: 100vh;
+  color: #FFF;
+  font-family: 'Roboto';
+}
+
+.left-side-banner h2, .left-side-banner h1 {
+  padding: 20px;
+}
+
+.inner-side-container {
+  margin-top: 25%;
+}
+
+.form-group {
+  margin-right: 10px;
+}
+
+.register-title h4{
+  margin-top: 10%;
+  width: 100%;
+  text-align: center;
+}
+
+.landing-container {
+  padding: 20px;
+}
+
+.register-form {
+  display: block;
+  margin: 0 auto;
+  width: 80%;
+}
