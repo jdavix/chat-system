@@ -47,6 +47,7 @@ export default observer(App);
 
 function PrivateRoute({ children, ...props }) {
   console.log("Private route token: ", props.token);
+
   return (
     <Route
       {...props}
