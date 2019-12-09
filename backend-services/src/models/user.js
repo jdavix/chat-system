@@ -34,4 +34,10 @@ UserSchema.pre('save', function (next) {
   next();
 });
 
+UserSchema.methods.serialize = function() {
+  let userJson = this.toObject();
+  delete userJson.password;
+  return userJson;
+};
+
 export default connection.model('User', UserSchema);

@@ -2,6 +2,7 @@ import User from '../models/user';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import env from '../config/env';
+import ApiError from '../lib/error';
 
 export const show = async (req, res) => {
   let user = await User.findById(req.params.id);
@@ -20,7 +21,11 @@ export const create = async (req, res) => {
   let user = new User(params);
   let error = user.validateSync();
   if (!error) {
-    res.json(message);
+    user.save((err, resp)=>{
+      let id = resp._id.toHexString();
+      const token = jwt.sign({id: id}, env.secret, {expiresIn: '24h'})
+      res.json({...user.serialize(), _id: id, token});
+    })
   } else {
     throw new ApiError(422, 'User could not be created', error.errors)
   }
@@ -31,7 +36,7 @@ export const signIn = async (req, res, next) => {
 
   if (user && bcrypt.compareSync(req.body.password, user.password)) {
     const token = jwt.sign({id: user._id.toHexString()}, env.secret, { expiresIn: '24h' });
-    res.json({user: user, token: token});
+    res.json({...user.serialize(), token});
   } else {
     throw new ApiError(401, 'Email or Password are invalid', {});
   }
