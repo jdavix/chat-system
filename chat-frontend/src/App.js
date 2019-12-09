@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { observer } from 'mobx-react-lite';
 import AuthStore from './stores/authStore';
 
@@ -12,17 +12,27 @@ import Chat from './pages/chat';
 import Landing from './pages/landing';
 
 export function App(props) {
+  const [loading, setLoading] = useState(true);
+
   const authStore = useContext(AuthStore);
   let { token, currentUser, setToken, signout, rehydrateCurrentUser } = authStore;
 
   useEffect(()=>{
-    rehydrateCurrentUser();
+    rehydrateCurrentUser().then((resp)=>{
+      console.log("rehydratedUser: ", resp)
+      setLoading(false)
+    });
   }, [])
 
   return (
-    <Router >
+    <Router>
       <Switch>
-        <PrivateRoute path="/chat" index exact token={token}>
+        <PrivateRoute
+          path="/chat"
+          index exact
+          token={token}
+          loading={loading}
+        >
           <Chat
             currentUser={currentUser}
             signout={signout}
@@ -46,13 +56,13 @@ export function App(props) {
 export default observer(App);
 
 function PrivateRoute({ children, ...props }) {
-  console.log("Private route token: ", props.token);
-
+  const {loading, token} = props;
+  console.log("TOKEN?: ", token)
   return (
     <Route
       {...props}
       render={({ location }) =>
-        props.token ? (
+        token ? (
           children
         ) : (
           <Redirect

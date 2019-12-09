@@ -7,9 +7,7 @@ export default function Sidebar(props) {
 
   let [groups, setGroups] = useState([]);
   let [directs, setDirects] = useState([]);
-  let {currentUser, token} = props;
-
-  console.log("Fetching chats token: ", token)
+  let {currentUser, token, signout} = props;
 
   async function loadGroups() {
     let data = await fetchChats({chat_type: 'group', user_id: currentUser._id}, token)
@@ -37,8 +35,19 @@ export default function Sidebar(props) {
     }
   }
 
+  function signOut(e) {
+    e.preventDefault();
+    console.log("logout", signout)
+    signout();
+  }
+
   return (
       <div className="sidebar">
+        <div className="sidebar-header">
+          <div className="session-title">
+            <span>You are signed in as {currentUser.username},</span> <a onClick={signOut}>Sign out</a>
+          </div>
+        </div>
         <div className="sidebar-header">
           <Button color="secondary" size="sm" onClick={props.newConver}>Create New Conversation</Button>
         </div>

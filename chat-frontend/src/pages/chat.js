@@ -24,7 +24,7 @@ const Chat = observer((props)=> {
   const chatStore = useContext(ChatStore);
   let { currentChat, setChat } = chatStore;
 
-  const { token, currentUser } = props;
+  const { token, currentUser, signout } = props;
 
   useEffect(()=>{
     chatStore.rehydrateChat(token).then((chat)=>{
@@ -78,6 +78,7 @@ const Chat = observer((props)=> {
               setChat={setChat}
               token={token}
               currentUser={currentUser}
+              signout={signout}
             />
           </Col>
           <Col md="8" style={{padding: 0}}>

@@ -21,6 +21,7 @@ class AuthStore {
 
   signout(token) {
     this.token = null;
+    this.currentUser = {};
     localStorage.setItem('token', null)
   }
 
@@ -39,8 +40,10 @@ class AuthStore {
 
 decorate(AuthStore, {
   currentUser: observable,
+  token: observable,
   setToken: action,
   rehydrateCurrentUser: action,
+  signout: action,
 })
 
 export default createContext(new AuthStore());

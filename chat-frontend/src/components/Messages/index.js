@@ -28,7 +28,7 @@ export default function Messages(props) {
       container.current.scrollTop = container.current.scrollHeight;
     });
 
-  }, [props.socket]);
+  }, [props.socket, currentUser]);
 
   useEffect(()=>{
     container.current.scrollTop = container.current.scrollHeight;

@@ -9,7 +9,7 @@ function Landing(props) {
   const [signupErrors, setErrors] = useState({})
   const {setToken} = props;
 
-  console.log("Token: ", localStorage.getItem('token'))
+  const token = localStorage.getItem('token')
 
   async function register(fields, {resetForm}) {
     try {
@@ -39,7 +39,10 @@ function Landing(props) {
     resetForm();
   }
 
+  console.log("Token???", token)
+
   return (
+    !token ? (<h3 style={{width: '100%', textAlign: 'center', marginTop: '20%'}}>Loading...</h3>) :
     <Row>
       <Col md="4" className="left-side-banner">
         <div className="inner-side-container">
