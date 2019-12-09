@@ -14,8 +14,18 @@ export default function Conver(props) {
       <div className="top-menu">
         <h1>{props.chat.title}</h1>
       </div>
-      <Messages socket={socket} chat_id={props.chat._id}/>
-      <MessageInput socket={socket} chat_id={props.chat._id}/>
+      <Messages
+        socket={socket}
+        chat_id={props.chat._id}
+        token={props.token}
+        currentUser={props.currentUser}
+      />
+      <MessageInput
+        socket={socket}
+        chat_id={props.chat._id}
+        token={props.token}
+        currentUser={props.currentUser}
+      />
     </div>
   )
 }

@@ -5,16 +5,16 @@ import {signin, signup} from '../services/usersService';
 
 import './landing.css';
 
-function Landing() {
+function Landing(props) {
   const [signupErrors, setErrors] = useState({})
+  const {setToken} = props;
 
   console.log("Token: ", localStorage.getItem('token'))
 
   async function register(fields, {resetForm}) {
     try {
       let data = await signup(fields);
-      console.log(data.data);
-      localStorage.setItem('token', data.data.token);
+      setToken(data.data.token);
       resetForm();
     } catch(err) {
       if (err.response) {
@@ -28,8 +28,7 @@ function Landing() {
   async function login(fields, {resetForm}) {
     try {
       let data = await signin(fields);
-      console.log(data.data);
-      localStorage.setItem('token', data.data.token)
+      setToken(data.data.token);
     } catch(err) {
       if (err.response) {
         alert(err.response.data.message)

@@ -24,8 +24,10 @@ const Chat = observer((props)=> {
   const chatStore = useContext(ChatStore);
   let { currentChat, setChat } = chatStore;
 
+  const { token, currentUser } = props;
+
   useEffect(()=>{
-    chatStore.rehydrateChat().then((chat)=>{
+    chatStore.rehydrateChat(token).then((chat)=>{
     })
   }, [])
 
@@ -34,9 +36,8 @@ const Chat = observer((props)=> {
       socket.disconnect();
       let skt = io('localhost:3001');
       let chat = toJS(currentChat);
-      skt.emit('JOIN', {chat, user_id: '5de8160ebf75f3a5fe2e2044'});
+      skt.emit('JOIN', {chat, user_id: currentUser._id});
       setSocket(skt);
-      console.log("Joining...: ", chat._id);
     }
   }, [currentChat]);
 
@@ -45,10 +46,14 @@ const Chat = observer((props)=> {
     let title = fields.title;
     emailList = emailList.replace(/\s/g,'');
     emailList = emailList.split(",")
+    emailList.push(currentUser.email);
+
+    let uniq = new Set(emailList);
+    emailList = [...uniq];
 
     let resp;
     try {
-      resp = await saveGroupChat({title: title, invited_emails: emailList});
+      resp = await saveGroupChat({title: title, invited_emails: emailList}, token);
       setChat(resp.data);
     } catch(e) {
       resp = e.response;
@@ -67,10 +72,20 @@ const Chat = observer((props)=> {
       <Container>
         <Row>
           <Col md="4" style={{padding: 0}}>
-            <Sidebar newConver={toggle} chat={currentChat} setChat={setChat}/>
+            <Sidebar
+              newConver={toggle}
+              chat={currentChat}
+              setChat={setChat}
+              token={token}
+              currentUser={currentUser}
+            />
           </Col>
           <Col md="8" style={{padding: 0}}>
-            <Conver chat={currentChat}/>
+            <Conver
+              chat={currentChat}
+              token={token}
+              currentUser={currentUser}
+            />
           </Col>
         </Row>
         <Modal isOpen={modal} toggle={toggle}>

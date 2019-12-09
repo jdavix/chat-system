@@ -5,13 +5,14 @@ import {fetchMessages} from '../../services/messagesService';
 export default function Messages(props) {
   let [messages, setMessages] = useState([]);
   let container = useRef()
+  let {token, currentUser} = props;
 
   async function loadMessages() {
     try {
       if (!props.chat_id) return null ;
 
       console.log("CHAT ID: ", props.chat_id);
-      let data = await fetchMessages({chat_id: props.chat_id});
+      let data = await fetchMessages({chat_id: props.chat_id}, token);
       setMessages(data.data);
     } catch(e) {
       console.log(e);

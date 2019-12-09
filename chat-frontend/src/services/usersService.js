@@ -24,3 +24,14 @@ export function signup(params) {
     },
   });
 }
+
+export function fetchMe(token) {
+  return axios({
+    method: 'get',
+    url: API_URL + '/api/v1/users/me',
+    headers: {'Content-Type': 'application/json', 'Accept': 'application/json', 'x-access-token': token},
+    data: {
+      ...DEFAULT_PARAMS,
+    },
+  });
+}

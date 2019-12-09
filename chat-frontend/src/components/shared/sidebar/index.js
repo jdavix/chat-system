@@ -7,14 +7,17 @@ export default function Sidebar(props) {
 
   let [groups, setGroups] = useState([]);
   let [directs, setDirects] = useState([]);
+  let {currentUser, token} = props;
+
+  console.log("Fetching chats token: ", token)
 
   async function loadGroups() {
-    let data = await fetchChats({chat_type: 'group', user_id: '5de8160ebf75f3a5fe2e2044'})
+    let data = await fetchChats({chat_type: 'group', user_id: currentUser._id}, token)
     setGroups(data.data);
   }
 
   async function loadDirects() {
-    let data = await fetchChats({chat_type: 'direct', user_id: '5de8160ebf75f3a5fe2e2044'})
+    let data = await fetchChats({chat_type: 'direct', user_id: currentUser._id}, token)
     setDirects(data.data);
   }
 

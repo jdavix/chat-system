@@ -4,6 +4,8 @@ import {Input, Button} from 'reactstrap';
 
 export default function MessageInput(props) {
   let [text, setText] = useState('')
+  let {currentUser} = props;
+
   function onChange(e) {
     setText(e.target.value);
   }
@@ -12,8 +14,8 @@ export default function MessageInput(props) {
     console.log(props.chat_id);
     e.preventDefault();
     props.socket.emit('SEND_MESSAGE', {
-      creator_username: "Josh",
-      creator: '5de8160ebf75f3a5fe2e2044',
+      creator_username: currentUser.username,
+      creator: currentUser._id,
       text: text,
       sent_at: new Date(),
       group_chat: props.chat_id,

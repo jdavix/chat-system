@@ -17,11 +17,11 @@ class ChatStore {
     }
   }
 
-  async rehydrateChat() {
+  async rehydrateChat(token) {
     let id = localStorage.getItem('currentChatId');
     console.log("ID from rehydrate: ", id);
 
-    let response = await fetchChat(id);
+    let response = await fetchChat(id, token);
 
     runInAction(() => {
       this.currentChat = response.data;
