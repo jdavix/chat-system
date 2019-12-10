@@ -1,17 +1,33 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './message-input.css';
 import {Input, Button} from 'reactstrap';
 
+let timer = null;
 export default function MessageInput(props) {
-  let [text, setText] = useState('')
-  let {currentUser} = props;
+  const [text, setText] = useState('')
+  const [typing, setTyping] = useState(null)
+  let {currentUser, chat_id} = props;
+
+  useEffect(()=>{
+    props.socket.on('TYPING', function(data) {
+      setTyping(data.username);
+    });
+  }, [props.socket, currentUser, chat_id])
 
   function onChange(e) {
+    clearTimeout(timer);
     setText(e.target.value);
+
+    props.socket.emit('TYPING', {
+      username: currentUser.username,
+      chat_id: chat_id,
+    });
+
+    timer = setTimeout(()=>{
+      props.socket.emit('TYPING', {chat_id: chat_id})
+    }, 1000);
   }
   function sendMessage(e) {
-    console.log("sending")
-    console.log(props.chat_id);
     e.preventDefault();
     props.socket.emit('SEND_MESSAGE', {
       message: {
@@ -28,8 +44,11 @@ export default function MessageInput(props) {
   }
   return (
     <div className="message-input">
-      <Input placeholder="Write message.." onChange={onChange} value={text}/>
-      <Button color="primary" onClick={sendMessage}>Send</Button>
+      { typing ? <div className="typing">{typing === currentUser.username ? 'You are ' : `${typing} is`} typing...</div> : null}
+      <div className="input">
+        <Input placeholder="Write message.." onChange={onChange} value={text}/>
+        <Button color="primary" onClick={sendMessage}>Send</Button>
+      </div>
     </div>
   )
 }

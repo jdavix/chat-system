@@ -1,5 +1,17 @@
 .message-input {
   display: flex;
+  flex-direction: column;
+}
+.typing {
+  background-color: #ccc;
+  width: 100%;
+  padding: 5px;
+  font-size: 12px;
+}
+.input {
+  display: flex;
   flex-direction: row;
   padding: 10px;
+  width: 100%;
+  background-color: #a5a5a5;
 }

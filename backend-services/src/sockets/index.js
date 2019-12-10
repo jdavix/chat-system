@@ -50,7 +50,7 @@ const configureSockets = (server) => {
       io.in(message.group_chat).emit('RECEIVE_MESSAGE', message);
     });
     skt.on('TYPING', (data) => {
-      skt.broadcast.in(data.chat_id).emit('TYPING', data);
+      io.in(data.chat_id).emit('TYPING', data);
     });
   });
 };
