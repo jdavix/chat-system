@@ -7,7 +7,7 @@ export default function Sidebar(props) {
 
   let [groups, setGroups] = useState([]);
   let [directs, setDirects] = useState([]);
-  let {currentUser, token, signout} = props;
+  let {currentUser, token, signout, cleanChat} = props;
 
   async function loadGroups() {
     let data = await fetchChats({chat_type: 'group', user_id: currentUser._id}, token)
@@ -39,6 +39,7 @@ export default function Sidebar(props) {
     e.preventDefault();
     console.log("logout", signout)
     signout();
+    cleanChat();
   }
 
   return (

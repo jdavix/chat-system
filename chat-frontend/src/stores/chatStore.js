@@ -8,6 +8,7 @@ class ChatStore {
   constructor() {
     this.rehydrateChat = this.rehydrateChat.bind(this);
     this.setChat = this.setChat.bind(this);
+    this.cleanChat = this.cleanChat.bind(this);
   }
 
   setChat(chat) {
@@ -15,6 +16,11 @@ class ChatStore {
       this.currentChat = chat;
       localStorage.setItem('currentChatId', chat._id);
     }
+  }
+
+  cleanChat() {
+    this.currentChat = {}
+    localStorage.removeItem('currentChatId');
   }
 
   async rehydrateChat(token) {
@@ -39,6 +45,7 @@ decorate(ChatStore, {
   currentChat: observable,
   setChat: action,
   rehydrateChat: action,
+  cleanChat: action,
 })
 
 export default createContext(new ChatStore());

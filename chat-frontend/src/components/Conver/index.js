@@ -12,7 +12,8 @@ export default function Conver(props) {
   return (
     <div className="conver">
       <div className="top-menu">
-        <h1>{props.chat.title}</h1>
+        <h1>{props.chat.title || 'Select a Chat from the left panel'}</h1>
+        <div style={{textAlign:'center', fontSize:'12px'}}><strong>Invited users:</strong> {props.chat.invitations ? props.chat.invitations.join(', ') : null}</div>
       </div>
       <Messages
         socket={socket}

@@ -22,7 +22,7 @@ const Chat = observer((props)=> {
   const toggle = () => setModal(!modal);
 
   const chatStore = useContext(ChatStore);
-  let { currentChat, setChat } = chatStore;
+  let { currentChat, setChat, cleanChat } = chatStore;
 
   const { token, currentUser, signout } = props;
 
@@ -80,6 +80,7 @@ const Chat = observer((props)=> {
               setChat={setChat}
               token={token}
               currentUser={currentUser}
+              cleanChat={cleanChat}
               signout={signout}
             />
           </Col>
