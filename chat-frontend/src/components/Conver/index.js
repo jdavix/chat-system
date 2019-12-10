@@ -24,6 +24,7 @@ export default function Conver(props) {
         socket={socket}
         chat_id={props.chat._id}
         token={props.token}
+        participants={props.chat.participants}
         currentUser={props.currentUser}
       />
     </div>

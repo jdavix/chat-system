@@ -5,9 +5,9 @@ import configureConnection from './config/mongodb';
 configureConnection();
 
 Object.keys(jobs).forEach((queueName) => {
-  const performer = queue(queueName);
+  const performer = queue(queueName, jobs[queueName].config);
 
-  performer.queue.process(jobs[queueName]);
+  performer.queue.process(jobs[queueName].job);
 
   performer.queue.on('completed', (job, result) => {
     console.log(`Job completed with result ${result}`);

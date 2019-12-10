@@ -2,8 +2,8 @@ import Queue from 'bull';
 import env from '../config/env';
 
 class Performer {
-  constructor(queueName) {
-    this.q = new Queue(queueName, env.redis_url);
+  constructor(queueName, config ={}) {
+    this.q = new Queue(queueName, env.redis_url, config);
     this.performLater = this.performLater.bind(this);
   }
 

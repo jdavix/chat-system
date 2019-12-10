@@ -14,11 +14,15 @@ export default function MessageInput(props) {
     console.log(props.chat_id);
     e.preventDefault();
     props.socket.emit('SEND_MESSAGE', {
-      creator_username: currentUser.username,
-      creator: currentUser._id,
-      text: text,
-      sent_at: new Date(),
-      group_chat: props.chat_id,
+      message: {
+        creator_username: currentUser.username,
+        creator: currentUser._id,
+        text: text,
+        sent_at: new Date(),
+        group_chat: props.chat_id,
+      },
+      participants: props.participants,
+      from: currentUser.email,
     });
     setText('');
   }
