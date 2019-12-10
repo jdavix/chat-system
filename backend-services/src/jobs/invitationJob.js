@@ -1,5 +1,6 @@
 import notifyNewChat from '../mailers/notifyNewChat';
 
-export default function invitationJob(job) {
-  return notifyNewChat(job.data);
+export default async function invitationJob(job) {
+  message = await notifyNewChat(job.data);
+  return message.id;
 }

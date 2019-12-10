@@ -9,6 +9,7 @@ export const index = async (req, res, next) => {
   let chat_type = req.query.chat_type;
 
   let result = await GroupChat.find({participants: {$in: [user_id]}, chat_type: chat_type});
+  console.log("chats: ", result);
   res.json(result);
 };
 

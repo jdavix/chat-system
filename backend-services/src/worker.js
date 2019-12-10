@@ -1,9 +1,29 @@
-import path from 'path';
-
 import queue from './queues';
-import { allQueues } from './queues/constants';
+import jobs from './jobs';
+import configureConnection from './config/mongodb';
 
-allQueues.forEach((q) => {
-  const processor = queue(q.name);
-  processor.queue.process(path.join(__dirname, q.jobPath));
+configureConnection();
+
+Object.keys(jobs).forEach((queueName) => {
+  const performer = queue(queueName);
+
+  performer.queue.process(jobs[queueName]);
+
+  performer.queue.on('completed', (job, result) => {
+    console.log(`Job completed with result ${result}`);
+  });
+
+  performer.queue.on('error', (job) => {
+    console.log(`Job error with result ${job}`);
+  });
+
+  performer.queue.on('waiting', (job) => {
+    console.log(`Job waiting with result ${job}`);
+  });
+
+  performer.queue.on('active', (job, jobPromise) => {
+    console.log(jobPromise);
+    console.log(`Job waiting with result ${job}`);
+  });
+
 });

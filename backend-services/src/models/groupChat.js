@@ -27,4 +27,27 @@ const GroupChatSchema = new mongoose.Schema({
 
 const { connection } = mongoose;
 
+GroupChatSchema
+
+GroupChatSchema.statics.acceptInvites = async function ({user_id, email, limit}) {
+  let groups = this.find({
+                          invitations: { $in: [email] },
+                          participants: { $nin: [user_id] },
+                       });
+
+  // Accept a first set of elements only:
+  if (limit) {
+    groups = groups.limit(limit);
+  }
+
+  groups = await groups.exec();
+
+  groups.forEach(async (group) => {
+    group.participants.push(user_id);
+    await group.save()
+  });
+
+  return {user_id, email};
+}
+
 export default connection.model('GroupChat', GroupChatSchema);
