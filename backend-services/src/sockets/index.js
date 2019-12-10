@@ -28,8 +28,7 @@ const configureSockets = (server) => {
 
     skt.on('SEND_MESSAGE', (data) => {
       let message = data.message;
-      // Note: currently it is not blocking the event emission by storing into the database first
-      // writing the messages to the database can be ensured by retrying through background jobs.
+      message.creator = skt.currentUserId;
       try {
         const msg = new Message(message);
         msg.save().then(async (msg) => {
