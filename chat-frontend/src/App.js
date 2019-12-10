@@ -44,7 +44,7 @@ const App = observer((props) => {
             token={token}
           />
         </PrivateRoute>
-        <Route path="/landing" exact render={(props)=>{
+        <Route path="/" exact render={(props)=>{
           if (token) {
             return <Redirect to={{
               pathname: '/chat',
@@ -77,7 +77,7 @@ function PrivateRoute({ children, ...props }) {
         ) : (
           <Redirect
             to={{
-              pathname: "/landing",
+              pathname: "/",
               state: { from: location }
             }}
           />
