@@ -1,14 +1,26 @@
 import socket from 'socket.io';
+import jwt from 'jsonwebtoken';
 import Message from '../models/message';
 import User from '../models/user';
-
-import { NOTIFICATIONS_QUEUE } from '../queues/constants';
+import env from '../config/env';
 import queue from '../queues';
+import { NOTIFICATIONS_QUEUE } from '../queues/constants';
 
 const configureSockets = (server) => {
   const io = socket(server);
 
-  io.on('connection', (skt) => {
+  io.use(function(socket, next) {
+    if (socket.handshake.query && socket.handshake.query.token) {
+      jwt.verify(socket.handshake.query.token, env.secret, function(err, decoded) {
+        if(err) return next(new Error('Authentication error'));
+        socket.currentUserId = decoded.id;
+        next();
+      });
+    } else {
+      next(new Error('Authentication error'));
+    }
+  })
+  .on('connection', (skt) => {
     skt.on('JOIN', (data) => {
       console.log("JOINED: ", data.chat._id);
       skt.join(data.chat._id);
@@ -33,6 +45,7 @@ const configureSockets = (server) => {
       } catch (e) {
         console.log(e);
       }
+
       console.log("Emitting: ", message.text);
       io.in(message.group_chat).emit('RECEIVE_MESSAGE', message);
     });

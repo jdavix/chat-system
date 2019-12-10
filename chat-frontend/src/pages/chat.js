@@ -34,7 +34,9 @@ const Chat = observer((props)=> {
   useEffect(()=>{
     if (currentChat._id) {
       socket.disconnect();
-      let skt = io('localhost:3001');
+      let skt = io.connect('localhost:3001', {query: {
+        token: token,
+      }});
       let chat = toJS(currentChat);
       skt.emit('JOIN', {chat, user_id: currentUser._id});
       setSocket(skt);
