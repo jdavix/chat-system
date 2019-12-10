@@ -72,3 +72,19 @@ export const update = async (req, res) => {
   }
 
 };
+
+export const leave = async (req, res) => {
+  let user = await User.findById(req.body.currentUserId);
+  if (user) {
+    let chat = await GroupChat.findById(req.params.id);
+    let participants = chat.participants;
+    participants.splice(participants.indexOf(req.body.currentUserId), 1);
+
+    let invitations = chat.invitations;
+    invitations.splice(invitations.indexOf(user.email), 1);
+    await chat.save();
+    res.json(chat);
+  } else {
+    throw new ApiError(404, 'Chat could not be found');
+  }
+}

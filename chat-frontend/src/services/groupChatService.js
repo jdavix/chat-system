@@ -35,3 +35,14 @@ export function fetchChats(params, token = null) {
     },
   });
 }
+
+export function leaveChat(chatId, token = null) {
+  return axios({
+    method: 'post',
+    url: API_URL + `/api/v1/group_chats/${chatId}/leave`,
+    headers: {'Content-Type': 'application/json', 'Accept': 'application/json', 'x-access-token': token},
+    data: {
+      ...DEFAULT_PARAMS,
+    },
+  });
+}

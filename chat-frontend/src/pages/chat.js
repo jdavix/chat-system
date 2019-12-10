@@ -88,6 +88,7 @@ const Chat = observer((props)=> {
             <Conver
               chat={currentChat}
               token={token}
+              cleanChat={cleanChat}
               currentUser={currentUser}
             />
           </Col>
